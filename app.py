@@ -1,5 +1,4 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Query
 from typing import Optional
 import requests
 from bs4 import BeautifulSoup
@@ -9,14 +8,6 @@ app = FastAPI()
 
 # Constants
 WEBSITE_URL = "https://tripzoori-gittest1.fly.dev/"
-
-class Message(BaseModel):
-    text: str
-    url: Optional[str] = WEBSITE_URL
-
-class Response(BaseModel):
-    answer: str
-    source_data: Optional[str] = None
 
 def scrape_website(url: str = WEBSITE_URL) -> str:
     try:
@@ -51,9 +42,7 @@ def process_message(message: str, context: Optional[str] = None) -> str:
     
     # If we have context from the website
     if context:
-        # Split context into sentences
         sentences = re.split(r'[.!?]+', context)
-        # Clean sentences
         sentences = [s.strip() for s in sentences if s.strip()]
         
         # Keywords for specific types of information
@@ -86,12 +75,9 @@ def process_message(message: str, context: Optional[str] = None) -> str:
 def read_root():
     return {"message": "Welcome to the TripZoori Chatbot API"}
 
-@app.post("/chat", response_model=Response)
-async def chat(message: Message):
-    website_data = scrape_website(message.url)
-    response = process_message(message.text, website_data)
+@app.get("/chat")
+def chat(text: str = Query(..., description="User's question")):
+    website_data = scrape_website()
+    response = process_message(text, website_data)
     
-    return Response(
-        answer=response,
-        source_data=website_data if website_data else None
-    )
+    return {"answer": response, "source_data": website_data if website_data else None}
