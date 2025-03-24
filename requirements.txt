@@ -1,5 +1,8 @@
+fastapi
+uvicorn
+pydantic
 nltk
+numpy
 scikit-learn
-numpy 
 requests
 beautifulsoup4
