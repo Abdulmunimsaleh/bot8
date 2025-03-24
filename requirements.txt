@@ -1,6 +1,5 @@
-fastapi==0.109.1
-uvicorn==0.27.1
-requests==2.31.0
-beautifulsoup4==4.12.3
-pydantic==2.6.1
-pyt
+nltk
+scikit-learn
+numpy 
+requests
+beautifulsoup4
