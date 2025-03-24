@@ -11,6 +11,9 @@ import warnings
 warnings.filterwarnings('ignore')
 import os
 import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 from nltk.stem import WordNetLemmatizer
 nltk.download('popular', quiet=True)   
 import requests
